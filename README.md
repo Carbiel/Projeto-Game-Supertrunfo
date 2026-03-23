@@ -1,88 +1,76 @@
-# Projeto-Game-Supertrunfo
-Projeto basico em C
+# 🃏 Super Trunfo em C
 
-🃏 Super Trunfo em C
-📌 Sobre o projeto
+## 📌 Sobre o projeto
 
-Este projeto consiste no desenvolvimento de uma versão simples do jogo Super Trunfo, utilizando a linguagem C.
+Este projeto é uma implementação do jogo **Super Trunfo** utilizando a linguagem C.
 
-A proposta é simular a criação e comparação de duas cartas, baseadas em informações de estados, como:
+O sistema gera cartas aleatórias para o jogador e para a CPU, contendo informações como estado, população, área, PIB e outros atributos. O jogador escolhe um parâmetro e o sistema compara os valores para definir o vencedor da rodada.
 
-Nome do estado
+Este projeto foi desenvolvido com o objetivo de praticar lógica de programação, uso de `struct`, geração de dados aleatórios e estruturas de controle como `if` e `switch`.
 
-Código da carta
+---
 
-População
+## ⚙️ Funcionalidades
 
-Área
+* Geração aleatória de cartas
+* Estados aleatórios sem repetição
+* Códigos de carta automáticos
+* Cálculo de:
 
-PIB
+  * Densidade populacional
+  * PIB per capita
+  * Superpoder da carta
+* Comparação de atributos:
 
-Pontos turísticos
+  * População
+  * Área
+  * PIB
+  * Pontos turísticos
+  * Densidade populacional (regra invertida)
+  * PIB per capita
+  * Superpoder
 
-A partir desses dados, o programa calcula automaticamente:
+---
 
-Densidade populacional
+## 🎮 Como funciona
 
-PIB per capita
+1. O jogador inicia o jogo pelo menu.
+2. O sistema gera duas cartas (Jogador vs CPU).
+3. Os dados são exibidos na tela.
+4. O jogador escolhe um atributo.
+5. O sistema compara os valores:
 
-Um valor chamado "superpoder", que representa uma pontuação geral da carta
+   * Maior valor vence
+   * Exceção: menor densidade vence
+6. O resultado é exibido.
 
-⚙️ Como funciona
+---
 
-O programa funciona da seguinte forma:
+## 🧠 Conceitos aplicados
 
-O usuário insere os dados de duas cartas
+* `struct` para organização de dados
+* `rand()` para geração aleatória
+* `switch` para controle de fluxo
+* `if/else` para decisões
+* `sprintf` para criação de códigos dinâmicos
 
-O sistema calcula valores derivados (densidade, PIB per capita, etc.)
+---
 
-As cartas são exibidas na tela
+## 🚧 Em desenvolvimento
 
-É feita uma comparação entre os atributos
+Este projeto ainda pode ser melhorado com:
 
-O programa indica qual carta venceu em cada critério
+* Sistema de múltiplas rodadas
+* Melhor organização com funções (`void`)
+* Inteligência da CPU para escolher atributos
+* Interface mais amigável
 
-🧠 Lógica utilizada
+---
 
-Uso de variáveis (int, float, char)
+## 👨‍💻 Autor
 
-Entrada de dados com scanf
+Carlos Gabriel
 
-Saída de dados com printf
+Projeto desenvolvido como prática de programação em C.
 
-Estruturas condicionais (if, else if, else)
-
-Operações matemáticas para cálculos de indicadores
-
-🚧 Status do projeto
-
-⚠️ Este projeto ainda está em desenvolvimento.
-
-Atualmente, ele representa uma versão inicial com funcionalidades básicas. Ainda há muito espaço para evolução, como por exemplo:
-
-Melhorar a interface (menu interativo)
-
-Permitir escolha de atributos pelo jogador
-
-Implementar sistema de pontuação mais completo
-
-Adicionar mais cartas
-
-Melhorar validação de dados
-
-Organizar melhor o código (funções, modularização)
-
-🎯 Objetivo
-
-Este projeto tem como principal objetivo:
-
-Praticar lógica de programação em C
-
-Entender melhor o funcionamento de variáveis e estruturas condicionais
-
-Evoluir gradualmente para projetos mais complexos
-
-🚀 Considerações finais
-
-Este é um projeto de aprendizado, e ainda há muito caminho pela frente.
-A ideia é continuar evoluindo o código com o tempo, adicionando novas funcionalidades e melhorando a estrutura geral.
+atualmente ver 1.2
