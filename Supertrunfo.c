@@ -2,6 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
+
+// DOR E ANGUSTIA DE FAZER ISSO KAAKAKAKAKAKA. PODE IGNORAR ESSA MENSAGEM..
+void angustia()
+{
+    printf("AHHHHHHHHHHHHHHHH TO PERDENDO A CABEÇA COM ESSE CODIGOOOOOOOOOO.");
+}
 
 // Struct------------------------------------
 struct Carta
@@ -19,23 +26,31 @@ struct Carta
 
 int main()
 {
-    struct Carta jogador;
-    struct Carta cpu;
+    // struct-array------------
+    struct Carta jogador[10];
+    struct Carta cpu[10];
+
+    // variavel----------
+    int qtdjogador = 5;
+    int qtdcpu = 5;
 
     // switch------------------------------------
     int opcao;
     int escolha = 0;
 
+    // ALEATORIZADOR----
     srand(time(NULL));
 
-    //Estados------------------------------------
+    // Estados------------------------------------
     char estados[][20] = {
         "São Paulo", "Rio de Janeiro", "Minas Gerais",
-        "Bahia", "Paraná", "Ceará",
-        "Pernambuco", "Santa Catarina" 
-    };
+        "Bahia", "Paraná", "Ceará", "Pernambuco",
+        "Santa Catarina", "Goias", "Rio grande do sul"};
 
-    int total_estados = 8;
+    int total_estados = 10;
+
+    // VARIAVEL DE RODADA-------------
+    int rodada = 1;
 
     // loop------------------------------------
     while (escolha != 4)
@@ -43,6 +58,7 @@ int main()
 
         // Menu Principal------------------------------------
 
+        printf("CPU update release\n");
         printf("Menu Principal.\n\n");
         printf("1-Jogar.\n");
         printf("2-Regras.\n");
@@ -54,240 +70,300 @@ int main()
         {
         case 1:
 
-            //Gerador dos Estados------------------------------------
-            int i = rand() % total_estados;
-            int j = rand() % total_estados;
+            // CRIAR E EMBARALHAR DECK------------------------------------
+            int indices[10];
 
-            while (j == i)
-                j = rand() % total_estados;
+            for (int i = 0; i < total_estados; i++)
+                indices[i] = i;
 
-            strcpy(jogador.estado, estados [i]);
-            strcpy(cpu.estado, estados[j]);
-
-            //gerador de codigos------------------------------------
-            sprintf(jogador.codigo, "B%d", rand() % 100);
-            sprintf(cpu.codigo, "B%d", rand() % 100);
-
-            // Gerador das cartas------------------------------------
-
-            //JOGADOR
-            jogador.populacao = rand() % 10000000 + 10000000;
-            jogador.area = rand() % 2000 + 500;
-            jogador.pib = rand() % 1000 + 100;
-            jogador.Pt = rand() % 100;
-
-            //CPU
-            cpu.populacao = rand() % 10000000 + 10000000;
-            cpu.area = rand() % 2000 + 500;
-            cpu.pib = rand() % 1000 + 100;
-            cpu.Pt = rand() % 100;
-
-            //Calculos------------------------------------
-
-            //JOGADOR
-            jogador.densidade = (float)jogador.populacao / jogador.area;
-            jogador.pibpe = (float)(jogador.pib * 1000000000.0) / jogador.populacao;
-            jogador.superpoder = (float) jogador.populacao + jogador.area + jogador.pib + jogador.Pt + jogador.pibpe + (1.0 / jogador.densidade);
-
-            // CPU
-            cpu.densidade = (float) cpu.populacao / cpu.area;
-            cpu.pibpe = (float)(cpu.pib * 1000000000.0) / cpu.populacao;
-            cpu.superpoder = (float) cpu.populacao + cpu.area + cpu.pib + cpu.Pt + cpu.pibpe + (1.0 /cpu.densidade);
-
-
-            // mostrar informações coletadas------------------------------------
-
-            //JOGADOR
-            printf("\n\n--- JOGADOR ---\n");
-            printf("Estado: %s\n", jogador.estado);
-            printf("Codigo: %s\n", jogador.codigo);
-            printf("População: %d\n", jogador.populacao);
-            printf("Área: %.2f\n", jogador.area);
-            printf("PIB: %.2f\n", jogador.pib);
-            printf("Pontos turisticos: %d\n", jogador.Pt);
-            printf("Densidade Populacional: %.3f\n", jogador.densidade);
-            printf("PIB percapita %.2f\n", jogador.pibpe);
-            printf("Superpoder: %.1f\n\n", jogador.superpoder);
-
-            //CPU
-           /* printf("\n--- CPU--- \n");
-            printf("Estado: %s\n", cpu.estado);
-            printf("Codigo: %s\n", cpu.codigo);
-            printf("População: %d\n", cpu.populacao);
-            printf("Área: %.2f\n", cpu.area);
-            printf("PIB: %.2f\n", cpu.pib);
-            printf("Pontos turisticos: %d\n", cpu.Pt);
-            printf("Densidade Populacional: %.3f\n", cpu.densidade);
-            printf("PIB percapita %.2f\n", cpu.pibpe);
-            printf("Superpoder: %.1f\n\n", cpu.superpoder);
-            */
-            // switch e comparação if else com o Supertrunfo------------------------------------
-            printf("\nescolha um parâmetro:\n");
-            printf("1- População.\n");
-            printf("2- Área.\n");
-            printf("3- PIB.\n");
-            printf("4- Pontos turisticos.\n");
-            printf("5- Densidade populacional.\n");
-            printf("6- PIB percapita.\n");
-            printf("7- Superpoder.\n");
-            scanf("%d", &opcao);
-
-            switch (opcao)
+            // FISHER-YATES------------------------------
+            for (int i = total_estados - 1; i > 0; i--)
             {
-            case 1:
-                if (jogador.populacao > cpu.populacao)
+                int j = rand() % (i + 1);
+                int temp = indices[i];
+                indices[i] = indices[j];
+                indices[j] = temp;
+            }
+
+            // DISTRIBUIÇÃO DAS CARTAS--------------
+            for (int k = 0; k < qtdjogador; k++)
+            {
+                int idxJ = indices[k];
+                int idxC = indices[k + qtdjogador];
+
+                strcpy(jogador[k].estado, estados[idxJ]);
+                strcpy(cpu[k].estado, estados[idxC]);
+
+                sprintf(jogador[k].codigo, "B%d", rand() % 100);
+                sprintf(cpu[k].codigo, "B%d", rand() % 100);
+
+                // JOGADOR
+                jogador[k].populacao = rand() % 10000000 + 10000000;
+                jogador[k].area = rand() % 2000 + 500;
+                jogador[k].pib = rand() % 1000 + 100;
+                jogador[k].Pt = rand() % 100;
+
+                // CPU
+                cpu[k].populacao = rand() % 10000000 + 10000000;
+                cpu[k].area = rand() % 2000 + 500;
+                cpu[k].pib = rand() % 1000 + 100;
+                cpu[k].Pt = rand() % 100;
+
+                // Calculos------------------------------------
+
+                // JOGADOR
+                jogador[k].densidade = (float)jogador[k].populacao / jogador[k].area;
+                jogador[k].pibpe = (float)(jogador[k].pib * 1000000000.0) / jogador[k].populacao;
+                jogador[k].superpoder = (float)jogador[k].populacao + jogador[k].area + jogador[k].pib + jogador[k].Pt + jogador[k].pibpe + (1.0 / jogador[k].densidade);
+
+                // CPU
+                cpu[k].densidade = (float)cpu[k].populacao / cpu[k].area;
+                cpu[k].pibpe = (float)(cpu[k].pib * 1000000000.0) / cpu[k].populacao;
+                cpu[k].superpoder = (float)cpu[k].populacao + cpu[k].area + cpu[k].pib + cpu[k].Pt + cpu[k].pibpe + (1.0 / cpu[k].densidade);
+            }
+
+            // LOOP DO GAME------------------------
+            while (qtdjogador > 0 && qtdcpu > 0)
+            {
+                struct Carta cartaJ = jogador[0];
+                struct Carta cartaC = cpu[0];
+
+                // RODADA
+                printf("\n====================\n");
+                printf("      RODADA %d", rodada);
+                printf("\n====================\n");
+                // mostrar informações coletadas------------------------------------
+
+                // CPU
+                printf("---CARTA DO OPONENTE---\n");
+                printf("ESTADO: %s\n", cartaC.estado);
+                printf("CÓDIGO: %s\n", cartaC.codigo);
+                printf("POPULAÇÃO: ????\n");
+                printf("ÁREA: ????\n");
+                printf("PIB: ????\n");
+                printf("PONTOS tURISTICOS: ????\n");
+                printf("DENSIDADE POPULACIONAL ????:\n");
+                printf("PIB PERCAPITA: ????\n");
+                printf("SUPERPODER: ????\n\n");
+
+                // JOGADOR
+                printf("\n\n--- SUA CARTA ---\n");
+                printf("ESTADO: %s\n", cartaJ.estado);
+                printf("CÓDIGO: %s\n", cartaJ.codigo);
+                printf("POPULAÇÃO: %d\n", cartaJ.populacao);
+                printf("ÁREA: %.2f\n", cartaJ.area);
+                printf("PIB: %.2f\n", cartaJ.pib);
+                printf("PONTOS tURISTICOS: %d\n", cartaJ.Pt);
+                printf("DENSIDADE POPULACIONAL: %.3f\n", cartaJ.densidade);
+                printf("PIB PERCAPITA %.2f\n", cartaJ.pibpe);
+                printf("SUPERPODER: %.1f\n\n", cartaJ.superpoder);
+
+                // switch e comparação if else com o Supertrunfo------------------------------------
+                printf("\nescolha um parâmetro:\n");
+                printf("1- População.\n");
+                printf("2- Área.\n");
+                printf("3- PIB.\n");
+                printf("4- Pontos turisticos.\n");
+                printf("5- Densidade populacional.\n");
+                printf("6- PIB percapita.\n");
+                printf("7- Superpoder.\n");
+                scanf("%d", &opcao);
+
+                int jogadorVenceu = 0;
+
+                switch (opcao)
                 {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("População da carta 1: %d\n", jogador.populacao);
-                    printf("População da carta 2: %d\n\n", cpu.populacao);
+                case 1:
+                    if (cartaJ.populacao > cartaC.populacao)
+                    {
+                        jogadorVenceu = 1;
+                        printf("\n\nJOGADOR venceu a rodada!\n");
+                        printf("Boa carai\n");
+                    }
+                    else if (cartaJ.populacao < cartaC.populacao)
+                    {
+                        jogadorVenceu = -1;
+                        printf("\n\nCPU venceu a rodada!\n");
+                        printf("Ainda dá pra alcançar\n");
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                        printf("\n\nEmpate!\n");
+                        printf("Bom fazer o né acontece kakakaakak\n");
+                    }
+                    break;
+
+                case 2:
+                    if (cartaJ.area > cartaC.area)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.area < cartaC.area)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                case 3:
+                    if (cartaJ.pib > cartaC.pib)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.pib < cartaC.pib)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                case 4:
+                    if (cartaJ.Pt > cartaC.Pt)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.Pt < cartaC.Pt)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                case 5:
+                    if (cartaJ.densidade < cartaC.densidade)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.densidade > cartaC.densidade)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                case 6:
+                    if (cartaJ.pibpe > cartaC.pibpe)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.pibpe < cartaC.pibpe)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                case 7:
+                    if (cartaJ.superpoder > cartaC.superpoder)
+                    {
+                        jogadorVenceu = 1;
+                    }
+                    else if (cartaJ.superpoder < cartaC.superpoder)
+                    {
+                        jogadorVenceu = -1;
+                    }
+                    else
+                    {
+                        jogadorVenceu = 0;
+                    }
+                    break;
+
+                default:
+                    printf("Opção Inexistente....\n\n");
+                    continue;
                 }
-                else if (jogador.populacao < cpu.populacao)
+
+                // SUPERTRUNFO----------------
+
+                // JOGADOR VENCE
+                if (jogadorVenceu == 1)
                 {
-                    printf("\n\nCPU venceu!\n");
-                    printf("População da carta 1: %d\n", jogador.populacao);
-                    printf("População da carta 2: %d\n\n", cpu.populacao);
+                    printf("\nCarta do oponente adicionada no seu deck\n");
+                    printf("Continua assim parceiro\n");
+
+                    // ADICIONANDO A CARTA JOGADOR
+                    jogador[qtdjogador] = cartaC;
+                    qtdjogador++;
+
+                    // REMOVENDO A CARTA CPU
+                    for (int i = 0; i < qtdcpu - 1; i++)
+                        cpu[i] = cpu[i + 1];
+                    qtdcpu--;
+                }
+                else if (jogadorVenceu == -1)
+                {
+                    printf("\nO oponente pegou a sua carta\n");
+                    printf("Vai deixar ?\n");
+
+                    // ADICIONANDO A CARTA CPU
+                    cpu[qtdcpu] = cartaJ;
+                    qtdcpu++;
+
+                    // REMOVENDO A CARTA JOGADOR
+                    for (int i = 0; i < qtdjogador - 1; i++)
+                        jogador[i] = jogador[i + 1];
+                    qtdjogador--;
                 }
                 else
                 {
-                    printf("\n\nEmpate!\n");
-                    printf("População da carta 1: %d\n", jogador.populacao);
-                    printf("População da carta 2: %d\n\n", cpu.populacao);
+                    printf("\nEssa foi por pouco....\n");
                 }
-                break;
 
-            case 2:
-                if (jogador.area > cpu.area)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("Área da carta 1: %.2f\n", jogador.area);
-                    printf("Área da carta 2: %.2f\n\n", cpu.area);
-                }
-                else if (jogador.area < cpu.area)
-                {
-                    printf("\n\nCPU venceu!\n");
-                    printf("Área da carta 1: %.2f\n", jogador.area);
-                    printf("Área da carta 2: %.2f\n\n", cpu.area);
-                }
-                else
-                {
-                    printf("\n\nEmpate!\n");
-                    printf("Área da carta 1: %.2f\n", jogador.area);
-                    printf("Área da carta 2: %.2f\n\n", cpu.area);
-                }
-                break;
+                rodada++;
+                printf("\n=== PROXIMA RODADA ===\n");
+                Sleep(2000);
+            }
 
-            case 3:
-                if (jogador.pib > cpu.pib)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("PIB da carta 1: %.2f\n", jogador.pib);
-                    printf("PIB da carta 2: %.2f\n\n", cpu.pib);
-                }
-                else if (jogador.pib < cpu.pib)
-                {
-                    printf("\n\nCPU venceu!\n");
-                    printf("PIB da carta 1: %.2f\n", jogador.pib);
-                    printf("PIB da carta 2: %.2f\n\n", cpu.pib);
-                }
-                else
-                {
-                    printf("\n\nEmpate\n");
-                    printf("PIB da carta 1: %.2f\n", jogador.pib);
-                    printf("PIB da carta 2: %.2f\n\n", cpu.pib);
-                }
-                break;
+            // FIM DO GAME--------------------------
+            printf("\n====================\n");
+            printf("      FIM DO GAME     \n");
+            printf("====================\n\n");
 
-            case 4:
-                if (jogador.Pt > cpu.Pt)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("Pontos turisticos da carta 1: %d\n", jogador.Pt);
-                    printf("Pontos turisticos da carta 2: %d\n\n", cpu.Pt);
-                }
-                else if (jogador.Pt < cpu.Pt)
-                {
-                    printf("\n\nCPU venceu!\n");
-                    printf("Pontos turisticos da carta 1: %d\n", jogador.Pt);
-                    printf("Pontos turisticos da carta 2: %d\n\n", cpu.Pt);
-                }
-                else
-                {
-                    printf("\n\nEmpate!\n");
-                    printf("Pontos turisticos da carta 1: %d\n", jogador.Pt);
-                    printf("Pontos turisticos da carta 2: %d\n\n", cpu.Pt);
-                }
-                break;
+            if (qtdjogador > qtdcpu)
+            {
+                printf("\nVITORIA DO JOGADOR.\n");
+            }
+            else if (qtdjogador < qtdcpu)
+            {
+                printf("\nVITORIA DA CPU.\n");
+            }
 
-            case 5:
-                if (jogador.densidade < cpu.densidade)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("Densidade da carta 1: %.2f\n", jogador.densidade);
-                    printf("Desidade da carta 2: %.2f\n\n", cpu.densidade);
-                }
-                else if (jogador.densidade > cpu.densidade)
-                {
-                    printf("\n\nCPU venceu!\n");
-                    printf("Densidade da carta 1: %.2f\n", jogador.densidade);
-                    printf("Desidade da carta 2: %.2f\n\n", cpu.densidade);
-                }
-                else
-                {
-                    printf("\n\nEmpate\n");
-                    printf("Densidade da carta 1: %.2f\n", jogador.densidade);
-                    printf("Desidade da carta 2: %.2f\n\n", cpu.densidade);
-                }
-                break;
+            // JOGAR NOVAMENTE ?----------------
+            int jogarNovamente;
 
-            case 6:
-                if (jogador.pibpe > cpu.pibpe)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("PIB percapita da carta 1: %.2f\n", jogador.pibpe);
-                    printf("PIB percapita da carta 2: %.2f\n\n", cpu.pibpe);
-                }
-                else if (jogador.pibpe < cpu.pibpe)
-                {
-                    printf("\n\nCPU venceu!\n");
-                    printf("PIB percapita da carta 1: %.2f\n", jogador.pibpe);
-                    printf("PIB percapita da carta 2: %.2f\n\n", cpu.pibpe);
-                }
-                else
-                {
-                    printf("\n\nEmpate\n");
-                    printf("PIB percapita da carta 1: %.2f\n", jogador.pibpe);
-                    printf("PIB percapita da carta 2: %.2f\n\n", cpu.pibpe);
-                }
-                break;
+            printf("\n Mais uma partida ?\n");
+            printf("1-SIM\n 2-NÃO");
+            scanf("%d", &jogarNovamente);
 
-            case 7:
-                if (jogador.superpoder > cpu.superpoder)
-                {
-                    printf("\n\nJOGADOR venceu!\n");
-                    printf("===Superpoder=== da carta 1: %.1f\n", jogador.superpoder);
-                    printf("===Superpoder=== da carta 2: %.1f\n\n", cpu.superpoder);
-                }
-                else if (jogador.superpoder < cpu.superpoder)
-                {
-                    printf("CPU venceu!\n");
-                    printf("===Superpoder=== da carta 1: %.1f\n", jogador.superpoder);
-                    printf("===Superpoder=== da carta 2: %.1f\n\n", cpu.superpoder);
-                }
-                else
-                {
-                    printf("Empate\n");
-                    printf("===Superpoder=== da carta 1: %.1f\n", jogador.superpoder);
-                    printf("===Superpoder=== da carta 2: %.1f\n\n", cpu.superpoder);
-                }
-                break;
-
-            default:
-                printf("Opção Inexistente....\n\n");
+            if (jogarNovamente == 1)
+            {
+                qtdjogador = 5;
+                qtdcpu = 5;
+                rodada = 1;
+                continue;
+            }
+            else
+            {
                 break;
             }
 
-            break;
-
+        // REGRAS DO GAME-------------------------------------
         case 2:
             printf("\n=================================\n");
             printf("          REGRAS DO GAME          ");
@@ -309,23 +385,26 @@ int main()
             getchar();
             break;
 
+        // CREDITOS-CRIADOR-VERSÃO----------------------------
         case 3:
             printf("\n=================================\n");
             printf("           CREDITOS              \n");
             printf("=================================\n");
             printf("Criador: Carlos Gabriel\n");
             printf("Projeto: Super Trunfo em C\n");
-            printf("Versao: 1.2\n");
+            printf("Versao: 1.8\n");
             printf("=================================\n\n");
-            printf("Pressione qualquer tecla para voltar...");
+            printf("Pressione ENTER para voltar...");
             getchar();
             getchar();
             break;
 
+        // SAIDA-------------------
         case 4:
             printf("Saindo....");
             break;
 
+        // EM CASO DE ERRO DE DIGITAÇÃO-----------
         default:
             printf("Opção Inexistente....\n\n");
             break;
