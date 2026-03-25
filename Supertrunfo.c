@@ -4,12 +4,6 @@
 #include <time.h>
 #include <windows.h>
 
-// DOR E ANGUSTIA DE FAZER ISSO KAAKAKAKAKAKA. PODE IGNORAR ESSA MENSAGEM..
-void angustia()
-{
-    printf("AHHHHHHHHHHHHHHHH TO PERDENDO A CABEÇA COM ESSE CODIGOOOOOOOOOO.");
-}
-
 // Struct------------------------------------
 struct Carta
 {
